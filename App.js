@@ -1,27 +1,20 @@
-import {auth} from './database/firebase-config'
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import StackNavigator from './components/StackNavigator';
 import * as Font from 'expo-font';
 import { useEffect, useState } from 'react';
-import { ClerkProvider, SignedIn, SignedOut, useAuth, useUser } from '@clerk/clerk-expo';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { tokenCache } from '@clerk/clerk-expo/token-cache';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import { Stack } from 'expo-router';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { signInWithCustomToken } from 'firebase/auth';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY; //Clerk으로 로그인 관리
   if (!publishableKey) {
     throw new Error("CLERK_PUBLISHABLE_KEY Error");
   }
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { //폰트 본명조
     async function loadFonts() {
       await Font.loadAsync({
         'Heavy': require('./assets/fonts/SourceHanSerifK-Heavy.otf'),

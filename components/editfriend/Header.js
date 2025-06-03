@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
 import vector from '../../assets/images/vector.png';
 import { useNavigation } from '@react-navigation/native';
 

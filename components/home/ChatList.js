@@ -1,5 +1,5 @@
 import { View, FlatList } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { useUser } from '@clerk/clerk-expo';
 import { collection, getDocs } from 'firebase/firestore';
@@ -27,7 +27,7 @@ const ChatList = ({setModal, setSelectedChat}) => {
         const data = docSnap.data();
         const users = data.users;
 
-        if (users.includes(myUid)) {
+        if (users.includes(myUid)) { 
           const friendUid = users.find(uid => uid !== myUid);
           const lastMessageSender = data.lastMessageSender;
           const lastMessageTime = data.lastMessageTime?.toDate?.();
@@ -36,7 +36,8 @@ const ChatList = ({setModal, setSelectedChat}) => {
           const isOver24h = lastMessageTime
             ? now - lastMessageTime > 24 * 60 * 60 * 1000
             : false;
-
+            
+          //내가 마지막으로 보냈거나, 마지막 메세지가 24시간이 지났거나, 대화마무리 버든을 누른 경우
           const isRead = lastMessageSender === myUid || isOver24h || isFinished;
 
           myChatrooms.push({
@@ -51,7 +52,7 @@ const ChatList = ({setModal, setSelectedChat}) => {
 
       setChatRooms(myChatrooms);
     } catch (error) {
-      console.error('❌ 채팅방 불러오기 실패:', error);
+      console.error('채팅방 불러오기 실패:', error);
     }
   };
 

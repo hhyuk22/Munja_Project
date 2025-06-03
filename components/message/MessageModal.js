@@ -1,5 +1,4 @@
-import React from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
+import { Modal, Text, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
 import message from '../../assets/images/message.png';
 
 const MessageModal = ({ visible, onClose, onEnd }) => {

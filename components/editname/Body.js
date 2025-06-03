@@ -1,5 +1,5 @@
 import { View, TextInput, StyleSheet, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-expo';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../database/firebase-config';
@@ -21,7 +21,7 @@ const Body = ({ nameRef, setUpdateHandler }) => {
           nameRef.current = currentName;
         }
       } catch (err) {
-        console.error('❌ 이름 불러오기 실패:', err);
+        console.error('이름 불러오기 실패:', err);
       }
     };
 
@@ -42,7 +42,7 @@ const Body = ({ nameRef, setUpdateHandler }) => {
         });
         navigation.goBack();
       } catch (err) {
-        console.error('❌ 이름 업데이트 실패:', err);
+        console.error('이름 업데이트 실패:', err);
         Alert.alert('오류', '이름 변경에 실패했습니다.');
       }
     });

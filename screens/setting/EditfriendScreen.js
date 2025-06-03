@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Header from '../../components/editfriend/Header';
 import Body from '../../components/editfriend/Body';
 import { useRoute } from '@react-navigation/native';

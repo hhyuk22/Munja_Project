@@ -1,12 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useAuth, useUser } from '@clerk/clerk-expo';
-import { db } from '../../database/firebase-config';
-import { doc, getDoc } from 'firebase/firestore';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useAuth } from '@clerk/clerk-expo';
 
 const Body = ({setModal}) => {
-    const {user} = useUser()
     const {signOut} = useAuth()
     const handleSignOut = async() => {
         await signOut();

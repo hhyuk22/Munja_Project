@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native'
-import React, { useState } from 'react'
+import { View } from 'react-native'
+import { useState } from 'react'
 import Header from '../components/home/Header'
 import ChatList from '../components/home/ChatList'
 import HomeModal from '../components/home/HomeModal'
@@ -14,7 +14,7 @@ const HomeScreen = () => {
     <View style={{ flex: 1, backgroundColor: '#ffffff'}}>
       <Header />
       <ChatList setModal={setModal} setSelectedChat={setSelectedChat}/>
-      <HomeModal
+      <HomeModal //채팅방 나가기, 친구 차단 추가 예정
         visible={modal}
         onClose={() => setModal(false)}
         onEditName={() => {

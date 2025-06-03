@@ -1,12 +1,12 @@
 import { View } from 'react-native';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import Header from '../../components/addfriend/Header';
 import Body from '../../components/addfriend/Body';
 
 const AddfriendScreen = () => {
   const friendEmailRef = useRef('');
   const friendNicknameRef = useRef('');
-  const handleAddFriend = { current: null }; // Header에서 호출할 수 있게 전달
+  const handleAddFriend = { current: null }; //Header에서 호출할 수 있게 전달
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>

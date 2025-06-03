@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useAuth, useUser } from '@clerk/clerk-expo';
+import { useCallback, useState } from 'react'
+import { useUser } from '@clerk/clerk-expo';
 import { db } from '../../database/firebase-config';
 import { doc, getDoc } from 'firebase/firestore';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -8,7 +8,6 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 const Body = () => {
     const {user} = useUser()
     const navigation = useNavigation()
-    const myUid = user?.id;
     const email = user?.primaryEmailAddress?.emailAddress;
     const [name, setName] = useState('');
     useFocusEffect(

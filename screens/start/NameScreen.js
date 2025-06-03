@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../../database/firebase-config'
@@ -15,7 +15,7 @@ const NameScreen = () => {
   const updateName = async () => {
     try {
       if (!user?.id) {
-        console.warn('❌ Clerk 유저 ID 없음')
+        console.warn('Clerk 유저 ID 없음')
         return
       }
 
@@ -24,10 +24,10 @@ const NameScreen = () => {
         { name },
         { merge: true }
       )
-      console.log('✅ Firestore에 이름 저장 완료:', name)
+      console.log('Firestore에 이름 저장 완료:', name)
       navigation.navigate('Home')
     } catch (err) {
-      console.error('❌ 이름 저장 실패:', err.message ?? err)
+      console.error('이름 저장 실패:', err.message ?? err)
     }
   }
 

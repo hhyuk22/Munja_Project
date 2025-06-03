@@ -1,5 +1,5 @@
 import { View, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, StyleSheet, Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import send from '../../assets/images/send.png';
 import out from '../../assets/images/out.png';
 

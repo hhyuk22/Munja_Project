@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Header from '../../components/editname/Header';
 import Body from '../../components/editname/Body';
 

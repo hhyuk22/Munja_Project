@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import loading from '../../assets/images/loading.png'
 
 const LoadingScreen = () => {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
+  useEffect(() => { //시작할 때 문구 3초 보여주기기
     const timeout = setTimeout(() => {
       navigation.replace('Onboarding');
     }, 3000);

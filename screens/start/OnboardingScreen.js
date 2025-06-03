@@ -1,12 +1,5 @@
-import React, { useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { useRef, useState } from 'react';
+import { View, Text, FlatList, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '@clerk/clerk-expo';
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { View, FlatList } from 'react-native';
 import Header from '../components/message/Header';
 import SenderMessage from '../components/message/SenderMessage';
@@ -6,16 +6,7 @@ import ReciverMessage from '../components/message/ReciverMessage';
 import Input from '../components/message/Input';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { db } from '../database/firebase-config';
-import {
-  doc,
-  collection,
-  addDoc,
-  updateDoc,
-  getDoc,
-  query,
-  orderBy,
-  onSnapshot
-} from 'firebase/firestore';
+import { doc, collection, addDoc, updateDoc, getDoc, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { useUser } from '@clerk/clerk-expo';
 import MessageModal from '../components/message/MessageModal';
 
@@ -75,7 +66,7 @@ const MessageScreen = () => {
         });
       }
     } catch (error) {
-      console.error('❌ 메시지 전송 실패:', error);
+      console.error('메시지 전송 실패:', error);
     }
   };
 
@@ -88,9 +79,9 @@ const MessageScreen = () => {
         [`finished.${myUid}`]: true,
       });
 
-      console.log('✅ 읽음 처리 완료');
+      console.log('읽음 처리 완료');
     } catch (error) {
-      console.error('❌ 읽음 처리 실패:', error);
+      console.error('읽음 처리 실패:', error);
     }
   };
 

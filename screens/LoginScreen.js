@@ -1,21 +1,16 @@
-import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Alert, Linking } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Linking } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import { useOAuth, useAuth } from '@clerk/clerk-expo';
+import { useOAuth } from '@clerk/clerk-expo';
 import GoogleLogo from '../assets/images/google_logo.png';
 import { useNavigation } from '@react-navigation/native';
-import { signInWithCustomToken } from 'firebase/auth';
-import { auth } from '../database/firebase-config';
 import ParsedText from 'react-native-parsed-text';
 
-// 클럭 세션 처리를 위해 필요
-WebBrowser.maybeCompleteAuthSession();
+WebBrowser.maybeCompleteAuthSession(); // 클럭 세션 처리
 
 const LoginScreen = () => {
   const navigation = useNavigation();
 
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
-  const { getToken } = useAuth();
 
   const handleLogin = async () => {
   try {

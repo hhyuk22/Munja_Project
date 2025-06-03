@@ -1,16 +1,8 @@
 import { View, TextInput, StyleSheet, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from '../../database/firebase-config';
 import { useUser } from '@clerk/clerk-expo';
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-  setDoc,
-  getDoc,
-} from 'firebase/firestore';
+import { collection, doc, getDocs, query, where, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 
 const Body = ({ setAddFriendHandler }) => {
@@ -27,13 +19,11 @@ const Body = ({ setAddFriendHandler }) => {
           return;
         }
 
-        // 1. 친구 찾기
-        const q = query(
+        const q = query( //친구 찾기
           collection(db, 'users'),
           where('email', '==', friendEmail)
         );
         const querySnapshot = await getDocs(q);
-
         if (querySnapshot.empty) {
           Alert.alert('오류', '해당 이메일의 사용자를 찾을 수 없습니다.');
           return;
@@ -43,11 +33,9 @@ const Body = ({ setAddFriendHandler }) => {
         const friendData = friendDoc.data();
         const friendUid = friendData.uid;
         const friendName = friendData.name;
-
         const myUid = clerkUser?.id;
         const mySnap = await getDoc(doc(db, 'users', myUid));
         const myName = mySnap.exists() ? mySnap.data().name : '';
-
         const myFriendRef = doc(db, `users/${myUid}/friends`, friendUid);
         const myFriendSnap = await getDoc(myFriendRef);
         if (myFriendSnap.exists()) {
@@ -55,21 +43,18 @@ const Body = ({ setAddFriendHandler }) => {
           return;
         }
 
-        // 2. 친구 등록
-        await setDoc(myFriendRef, {
+        await setDoc(myFriendRef, { //친구 등록
           email: friendEmail,
           originalName: friendName,
           customName: friendNickname,
         });
-
         await setDoc(doc(db, `users/${friendUid}/friends`, myUid), {
           email: clerkUser?.primaryEmailAddress?.emailAddress || '',
           originalName: myName,
           customName: myName,
         });
-
-        // 3. 채팅방 생성 (필드 포함)
-        const chatroomId = [myUid, friendUid].sort().join('_');
+        
+        const chatroomId = [myUid, friendUid].sort().join('_'); //바로 채팅방 생성
         const chatroomRef = doc(db, 'chatrooms', chatroomId);
         const chatroomSnap = await getDoc(chatroomRef);
 
@@ -87,16 +72,16 @@ const Body = ({ setAddFriendHandler }) => {
             finished: finishedState,
             createdAt: new Date().toISOString(),
           });
-          console.log('✅ 채팅방 생성 및 초기 필드 생성 완료:', chatroomId);
+          console.log('채팅방 생성 및 초기 필드 생성 완료:', chatroomId);
         } else {
-          console.log('⚠️ 이미 채팅방 존재:', chatroomId);
+          console.log('이미 채팅방 존재:', chatroomId);
         }
 
         navigation.goBack();
         setFriendEmail('');
         setFriendNickname('');
       } catch (error) {
-        console.error('❌ 친구 추가 중 오류:', error);
+        console.error('친구 추가 중 오류:', error);
         Alert.alert('오류', '친구 추가 중 문제가 발생했어요.');
       }
     };

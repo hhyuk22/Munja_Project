@@ -1,6 +1,5 @@
 import {auth, db} from '../database/firebase-config'
-import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -11,7 +10,7 @@ import EditfriendScreen from '../screens/setting/EditfriendScreen';
 import SettingScreen from '../screens/setting/SettingScreen';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { signInWithCustomToken } from 'firebase/auth';
-import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import EditnameScreen from '../screens/setting/EditnameScreen';
 import OnboardingScreen from '../screens/start/OnboardingScreen';
 import LoadingScreen from '../screens/start/LoadingScreen';
@@ -22,7 +21,7 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
   const { user, isLoaded } = useUser();
-  const [entryPoint, setEntryPoint] = useState(null); // 'Home', 'Name', 'Login', 'Onboarding'
+  const [entryPoint, setEntryPoint] = useState(null);
   const { isSignedIn, getToken } = useAuth();
 
   useEffect(() => {
@@ -50,7 +49,7 @@ const StackNavigator = () => {
             }
           }
         } catch (err) {
-          console.error('❌ Firebase 로그인 실패:', err);
+          console.error('Firebase 로그인 실패:', err);
           setEntryPoint('Login');
         }
       } 

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
+import { Modal, Text, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
 import out from '../../assets/images/out.png';
 
 const DeleteIDModal = ({ visible, onClose, onEnd }) => {

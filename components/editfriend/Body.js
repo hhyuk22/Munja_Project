@@ -1,5 +1,5 @@
 import { View, TextInput, StyleSheet, Alert } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-expo';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../database/firebase-config';
@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const Body = ({ friendUid, currentName, setUpdateHandler }) => {
   const { user } = useUser();
-  const navigation = useNavigation(); // ← 추가
+  const navigation = useNavigation();
   const [newName, setNewName] = useState(currentName || '');
 
   useEffect(() => {

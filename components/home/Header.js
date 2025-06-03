@@ -1,10 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import union from '../../assets/images/union.png'
 import friend from '../../assets/images/friend.png'
 import set from '../../assets/images/set.png'
 import { useNavigation } from '@react-navigation/native'
-import { useAuth } from '@clerk/clerk-expo'
 
 const Header = () => {
   const navigation = useNavigation();
