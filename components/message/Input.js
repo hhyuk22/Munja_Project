@@ -57,10 +57,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 13,
-    lineHeight: 25,
-    paddingHorizontal: 5,
+    lineHeight: 18,
+    paddingHorizontal: 0,
     fontFamily: 'Regular',
     includeFontPadding: false,
+    textAlignVertical: 'center'
   },
   out: {
     width: 18,

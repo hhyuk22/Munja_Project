@@ -1,73 +1,83 @@
 import { View, FlatList } from 'react-native';
-import { useCallback, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/clerk-expo';
-import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../database/firebase-config';
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
 import ChatRow from './ChatRow';
 
-const ChatList = ({setModal, setSelectedChat}) => {
+const ChatList = ({ setModal, setSelectedChat }) => {
   const { user } = useUser();
   const [chatRooms, setChatRooms] = useState([]);
 
-  const fetchChatRooms = async () => {
-    try {
-      const myUid = user.id;
+  useEffect(() => {
+    const myUid = user.id;
 
-      const friendsSnapshot = await getDocs(collection(db, `users/${myUid}/friends`));
-      const friendsMap = {};
-      friendsSnapshot.forEach(doc => {
-        friendsMap[doc.id] = doc.data().customName || doc.data().originalName;
-      });
+    const loadFriendsAndListenChatrooms = async () => {
+      try {
+        const friendsSnapshot = await getDocs(collection(db, `users/${myUid}/friends`));
+        const friendsMap = {};
+        friendsSnapshot.forEach(doc => {
+          friendsMap[doc.id] = doc.data().customName || doc.data().originalName;
+        });
 
-      const allChatroomsSnap = await getDocs(collection(db, 'chatrooms'));
-      const myChatrooms = [];
-
-      for (const docSnap of allChatroomsSnap.docs) {
-        const data = docSnap.data();
-        const users = data.users;
-
-        if (users.includes(myUid)) { 
-          const friendUid = users.find(uid => uid !== myUid);
-          const lastMessageSender = data.lastMessageSender;
-          const lastMessageTime = data.lastMessageTime?.toDate?.();
-          const isFinished = data.finished?.[myUid] ?? false;
+        const unsubscribe = onSnapshot(collection(db, 'chatrooms'), async (snapshot) => {
           const now = new Date();
-          const isOver24h = lastMessageTime
-            ? now - lastMessageTime > 24 * 60 * 60 * 1000
-            : false;
-            
-          //내가 마지막으로 보냈거나, 마지막 메세지가 24시간이 지났거나, 대화마무리 버든을 누른 경우
-          const isRead = lastMessageSender === myUid || isOver24h || isFinished;
+          const myChatrooms = [];
 
-          myChatrooms.push({
-            id: docSnap.id,
-            friendUid,
-            displayName: friendsMap[friendUid] || '알 수 없음',
-            lastMessage: data.lastMessage || '',
-            isRead,
+          for (const docSnap of snapshot.docs) {
+            const data = docSnap.data();
+            const users = data.users;
+
+            if (users.includes(myUid)) {
+              const friendUid = users.find(uid => uid !== myUid);
+              const lastMessageSender = data.lastMessageSender;
+              const lastMessageTime = data.lastMessageTime?.toDate?.();
+              const isFinished = data.finished?.[myUid] ?? false;
+
+              const isOver24h = lastMessageTime
+                ? now - lastMessageTime > 24 * 60 * 60 * 1000
+                : false;
+
+              const isRead = lastMessageSender === myUid || isOver24h || isFinished;
+
+              myChatrooms.push({
+                id: docSnap.id,
+                friendUid,
+                displayName: friendsMap[friendUid] || '알 수 없음',
+                lastMessage: data.lastMessage || '',
+                lastMessageTime: lastMessageTime || new Date(0), // null 방지
+                isRead,
+              });
+            }
+          }
+
+          // 정렬 적용: 읽지 않은 → 최근 순으로
+          const sorted = myChatrooms.sort((a, b) => {
+            if (a.isRead !== b.isRead) {
+              return a.isRead ? 1 : -1; // 읽지 않은 것 먼저
+            }
+            return b.lastMessageTime - a.lastMessageTime; // 최신 메시지 순
           });
-        }
+
+          setChatRooms(sorted);
+        });
+
+        return () => unsubscribe();
+      } catch (error) {
+        console.error('채팅방 실시간 구독 실패:', error);
       }
+    };
 
-      setChatRooms(myChatrooms);
-    } catch (error) {
-      console.error('채팅방 불러오기 실패:', error);
-    }
-  };
+    loadFriendsAndListenChatrooms();
+  }, [user.id]);
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchChatRooms();
-    }, [])
-  );
 
   return (
     <View style={{ flex: 1 }}>
       <FlatList
         data={chatRooms}
         removeClippedSubviews={false}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <ChatRow
             chatroomId={item.id}

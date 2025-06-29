@@ -12,12 +12,18 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "ENV": "preview"
       }
     },
     "production": {
       "autoIncrement": true,
       "android": {
         "image": "latest"
+      },
+      "env": {
+        "ENV": "production"
       }
     }
   },
