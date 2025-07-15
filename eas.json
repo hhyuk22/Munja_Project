@@ -20,15 +20,7 @@
     "production": {
       "autoIncrement": true,
       "android": {
-        "image": "latest",
-        "secrets": {
-          "googleServices": {
-            "json": {
-              "path": "google-services.json",
-              "secret": "googleServicesJson"
-            }
-          }
-        }
+        "image": "latest"
       },
       "env": {
         "ENV": "production"
