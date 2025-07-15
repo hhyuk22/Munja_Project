@@ -1,5 +1,5 @@
-import {auth, db} from '../database/firebase-config'
-import { useEffect, useState } from 'react'
+import { auth, db } from '../database/firebase-config';
+import { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
@@ -16,8 +16,14 @@ import OnboardingScreen from '../screens/start/OnboardingScreen';
 import LoadingScreen from '../screens/start/LoadingScreen';
 import SetOnboardingScreen from '../screens/start/SetOnboardingScreen';
 import SignoutScreen from '../screens/setting/SignoutScreen';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 const Stack = createNativeStackNavigator();
+
+// 알림 핸들러 설정 (앱이 실행 중일 때 알림이 오면 어떻게 표시할지 결정)
+
 
 const StackNavigator = () => {
   const { user, isLoaded } = useUser();
@@ -25,6 +31,59 @@ const StackNavigator = () => {
   const { isSignedIn, getToken } = useAuth();
 
   useEffect(() => {
+
+    const registerForPushNotificationsAsync = async (uid) => {
+      // if (!Constants.isDevice) {
+      //   console.log("에뮬레이터에서는 푸시 토큰을 가져올 수 없습니다.");
+      //   return;
+      // }
+
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: false,
+          shouldSetBadge: false,
+        }),
+      });
+
+      if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+        console.log("안드로이드");
+      }
+
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+        console.log("알림설정1");
+      }
+      if (finalStatus !== 'granted') {
+        console.log("알림설정2");
+        alert('푸시 알림을 받으려면 알림 권한을 허용해주세요!');
+        return;
+      }
+      
+      try {
+        const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+        if (!projectId) {
+            throw new Error('Expo project ID not found');
+        }
+        const token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+        
+        // Firestore의 사용자 문서에 pushToken 저장
+        await setDoc(doc(db, 'users', uid), { pushToken: token }, { merge: true });
+
+      } catch (e) {
+        console.error("Push token 가져오기 실패", e);
+      }
+    };
+
     const loginToFirebase = async () => {
       if (isSignedIn && isLoaded) {
         try {
@@ -32,6 +91,9 @@ const StackNavigator = () => {
           const creds = await signInWithCustomToken(auth, token || '');
           const userRef = doc(db, 'users', creds.user.uid);
           const userSnap = await getDoc(userRef);
+
+          // Firebase 로그인 성공 후 푸시 알림 등록 함수 호출
+          await registerForPushNotificationsAsync(creds.user.uid);
 
           if (!userSnap.exists()) {
             await setDoc(userRef, {
@@ -111,5 +173,4 @@ const StackNavigator = () => {
   );
 };
 
-
-export default StackNavigator
+export default StackNavigator;

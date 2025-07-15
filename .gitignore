@@ -37,3 +37,6 @@ yarn-error.*
 
 # firebase
 .env
+
+# Secrets
+google-services.json
