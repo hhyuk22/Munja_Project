@@ -40,3 +40,6 @@ yarn-error.*
 
 # Secrets
 google-services.json
+
+# Log files
+*.log
