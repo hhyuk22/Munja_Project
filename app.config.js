@@ -22,8 +22,8 @@ module.exports = {
         backgroundColor: "#ffffff"
       },
       package: "com.hrkim0101.Munja",
-      // 자바스크립트 코드 사용을 위해 파일이름 app.json -> app.config.js 로 변경
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? "./google-services.json"
+      // 자바스크립트 코드 사용을 위해 파일이름 app.json -> app.config.js 로 변경 했다가 자바스크립트 다시 안씀
+      googleServicesFile: "./google-services.json"
     },
     web: {
       favicon: "./assets/favicon.png"
