@@ -16,6 +16,7 @@ import OnboardingScreen from '../screens/start/OnboardingScreen';
 import LoadingScreen from '../screens/start/LoadingScreen';
 import SetOnboardingScreen from '../screens/start/SetOnboardingScreen';
 import SignoutScreen from '../screens/setting/SignoutScreen';
+import { usePushNotifications } from './database/usePushNotifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,8 @@ const StackNavigator = () => {
   const { user, isLoaded } = useUser();
   const [entryPoint, setEntryPoint] = useState(null);
   const { isSignedIn, getToken } = useAuth();
+
+  usePushNotifications(); //푸시알림 호출
 
   useEffect(() => {
     const loginToFirebase = async () => {

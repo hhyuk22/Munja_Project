@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -18,3 +19,23 @@ const analytics = getAnalytics(app);
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+export const functions = getFunctions(app); // Functions 서비스도 초기화
+
+// **********************************************
+// ********* [중요] 로컬 에뮬레이터 연결 로직 *********
+// **********************************************
+
+// 로컬 환경인지 확인하는 조건 (예: Expo Go 또는 개발 빌드 환경)
+if (__DEV__) { 
+  // 1. Firestore 에뮬레이터 연결 (포트 기본값 8080)
+  connectFirestoreEmulator(db, "10.0.2.2", 8080); 
+  
+  // 2. Auth 에뮬레이터 연결 (포트 기본값 9099)
+  connectAuthEmulator(auth, "http://10.0.2.2:9099"); 
+  
+  // 3. Functions 에뮬레이터 연결 (포트 기본값 5001)
+  connectFunctionsEmulator(functions, "10.0.2.2", 5001); 
+  
+  console.log("Firebase Emulators에 연결되었습니다.");
+}
