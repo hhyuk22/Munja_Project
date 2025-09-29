@@ -16,7 +16,7 @@ import OnboardingScreen from '../screens/start/OnboardingScreen';
 import LoadingScreen from '../screens/start/LoadingScreen';
 import SetOnboardingScreen from '../screens/start/SetOnboardingScreen';
 import SignoutScreen from '../screens/setting/SignoutScreen';
-import { usePushNotifications } from './database/usePushNotifications';
+import { usePushNotifications } from '../database/usePushNotifications';
 
 const Stack = createNativeStackNavigator();
 
