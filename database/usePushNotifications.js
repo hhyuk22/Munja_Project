@@ -29,49 +29,33 @@ export const usePushNotifications = () => {
 };
 
 // 1. 토큰 획득 함수
+// 1. 토큰 획득 함수 (registerForPushNotificationsAsync 내부)
 async function registerForPushNotificationsAsync() {
-  let token;
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
+    // ... (권한 요청 로직)
 
-  // 1-1. 권한 요청
-  if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
+    if (finalStatus !== 'granted') {
+        console.error('푸시 알림 권한이 최종 거부됨!');
+        return;
+    }
 
-  // 1-2. 권한 거부 시 경고
-  if (finalStatus !== 'granted') {
-    alert('푸시 알림 권한이 거부되었습니다!');
-    return;
-  }
-
-  // 1-3. Expo Push Token 획득
-  token = (await Notifications.getExpoPushTokenAsync({
-    projectId: '96b88fb0-bdc2-40d1-8cf3-f55b8becce32', // app.json의 projectId 사용
-  })).data;
-
-  // 1-4. Android 채널 설정
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
-  return token;
+    // 1-3. Expo Push Token 획득
+    token = (await Notifications.getExpoPushTokenAsync({
+        projectId: '96b88fb0-bdc2-40d1-8cf3-f55b8becce32', // app.json의 projectId 확인
+    })).data;
+    
+    console.log('획득된 토큰:', token); // <-- 토큰이 실제로 찍히는지 확인
+    return token;
 }
 
-// 2. Firestore에 토큰 저장 함수
+// 2. Firestore에 토큰 저장 함수 (savePushTokenToFirestore 내부)
 async function savePushTokenToFirestore(uid, token) {
+    console.log('🔥🔥🔥 savePushTokenToFirestore 🔥🔥🔥')
   try {
     await updateDoc(doc(db, 'users', uid), {
-      expoPushToken: token, // users/{uid} 문서에 토큰 필드를 추가합니다.
+      expoPushToken: token, 
     });
-    console.log('푸시 토큰 Firestore 저장 완료:', token);
+    console.log('🔥🔥🔥 푸시 토큰 Firestore 저장 성공! 🔥🔥🔥'); // <-- 성공 로그 확인
   } catch (e) {
-    console.error('푸시 토큰 저장 실패:', e);
+    console.error('❌❌❌ 푸시 토큰 저장 실패:', e); // <-- 실패 로그 확인
   }
 }

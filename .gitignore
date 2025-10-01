@@ -37,3 +37,10 @@ yarn-error.*
 
 # firebase
 .env
+
+# Android (네이티브)
+android/.gradle/
+android/app/build/
+android/build/
+android/app/.cxx/
+android/app/google-services.json
