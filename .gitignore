@@ -44,3 +44,7 @@ android/app/build/
 android/build/
 android/app/.cxx/
 android/app/google-services.json
+
+# Native Project Folders
+android/
+ios/

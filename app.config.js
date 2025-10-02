@@ -23,7 +23,7 @@ module.exports = {
         foregroundImage: "./assets/images/logo.png",
         backgroundColor: "#ffffff"
       },
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? './android/app/google-services.json', 
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON, 
       package: "com.hrkim0101.Munja"
     },
     web: {
