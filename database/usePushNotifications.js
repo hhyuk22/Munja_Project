@@ -1,9 +1,10 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
-import { db } from './firebase-config'; // 기존 firebase-config.js 파일 import
+import { db, auth } from './firebase-config'; // 기존 firebase-config.js 파일 import
 import { doc, updateDoc } from 'firebase/firestore';
 import { useUser } from '@clerk/clerk-expo';
 import { useEffect } from 'react';
+import { getAuth } from 'firebase/auth';
 
 // 푸시 알림 핸들러 설정 (앱이 실행 중일 때 알림이 오면 처리)
 Notifications.setNotificationHandler({
@@ -71,6 +72,15 @@ async function registerForPushNotificationsAsync() {
 async function savePushTokenToFirestore(uid, token) {
     console.log('🔥🔥🔥 savePushTokenToFirestore 🔥🔥🔥')
   try {
+
+     // 1. [핵심] Firebase ID 토큰 강제 갱신
+    // Firestore 쓰기 전에 현재 사용자(auth.currentUser)의 ID 토큰을 갱신합니다.
+    const user = getAuth().currentUser; // 현재 Auth 유저 가져오기
+    if (user) {
+        await user.getIdToken(true); // 만료 여부와 관계없이 강제로 새 토큰을 요청
+        console.log("✅ Auth Token Refreshed.");
+    }
+
     await updateDoc(doc(db, 'users', uid), {
       expoPushToken: token, 
     });

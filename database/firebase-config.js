@@ -27,7 +27,7 @@ export const functions = getFunctions(app); // Functions 서비스도 초기화
 // **********************************************
 
 // 로컬 환경인지 확인하는 조건 (예: Expo Go 또는 개발 빌드 환경)
-if (__DEV__) { 
+if (false) { 
   // 1. Firestore 에뮬레이터 연결 (포트 기본값 8080)
   connectFirestoreEmulator(db, "10.0.2.2", 8083); 
   
