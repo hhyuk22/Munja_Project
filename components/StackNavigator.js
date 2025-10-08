@@ -9,14 +9,14 @@ import AddfriendScreen from '../screens/setting/AddfriendScreen';
 import EditfriendScreen from '../screens/setting/EditfriendScreen';
 import SettingScreen from '../screens/setting/SettingScreen';
 import { useAuth, useUser } from '@clerk/clerk-expo';
-import { signInWithCustomToken } from 'firebase/auth';
+import { signInWithCustomToken, getAuth } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import EditnameScreen from '../screens/setting/EditnameScreen';
 import OnboardingScreen from '../screens/start/OnboardingScreen';
 import LoadingScreen from '../screens/start/LoadingScreen';
 import SetOnboardingScreen from '../screens/start/SetOnboardingScreen';
 import SignoutScreen from '../screens/setting/SignoutScreen';
-import { usePushNotifications } from '../database/usePushNotifications';
+import { savePushTokenOnLogin } from '../database/usePushNotifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,14 +25,16 @@ const StackNavigator = () => {
   const [entryPoint, setEntryPoint] = useState(null);
   const { isSignedIn, getToken } = useAuth();
 
-  usePushNotifications(); //푸시알림 호출
-
   useEffect(() => {
     const loginToFirebase = async () => {
       if (isSignedIn && isLoaded) {
         try {
           const token = await getToken({ template: 'integration_firebase' });
           const creds = await signInWithCustomToken(auth, token || '');
+          
+          // Firebase Auth 토큰이 발급되었음을 보장한 후 푸시 토큰 저장을 시도합니다.
+          await savePushTokenOnLogin(user); 
+
           const userRef = doc(db, 'users', creds.user.uid);
           const userSnap = await getDoc(userRef);
 

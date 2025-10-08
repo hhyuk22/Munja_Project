@@ -15,23 +15,30 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const usePushNotifications = () => {
-  const { user } = useUser();
-    console.log("1");
-  useEffect(() => {
+// [새로 추가된 함수]: 토큰 획득/저장 로직을 외부에서 호출 가능하도록 만듭니다.
+export const savePushTokenOnLogin = async (user) => {
     if (!user?.id) return;
-    console.log("2");
-    registerForPushNotificationsAsync().then(token => {
-        console.log("3");
-      if (token) {
-        savePushTokenToFirestore(user.id, token);
-      }
-      console.log("4");
-    });
-  }, [user?.id]);
+
+    // 1. 토큰 획득 (로직은 registerForPushNotificationsAsync 그대로)
+    const token = await registerForPushNotificationsAsync();
+
+    // 2. Auth 토큰 갱신 및 Firestore 저장 (기존 savePushTokenToFirestore 로직)
+    if (token) {
+        try {
+            const firebaseUser = getAuth().currentUser;
+            if (firebaseUser) {
+                await firebaseUser.getIdToken(true); 
+                await updateDoc(doc(db, 'users', user.id), { 
+                    expoPushToken: token, 
+                });
+                console.log('🔥🔥🔥 [Login Flow] 푸시 토큰 저장 성공! 🔥🔥🔥');
+            }
+        } catch (e) {
+            console.error('❌❌❌ [Login Flow] 푸시 토큰 저장 실패:', e.message);
+        }
+    }
 };
 
-// 1. 토큰 획득 함수
 // 1. 토큰 획득 함수 (registerForPushNotificationsAsync 내부)
 async function registerForPushNotificationsAsync() {
     // -----------------------------------------------------------------
