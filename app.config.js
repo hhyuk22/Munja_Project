@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 module.exports = {
   expo: {
-    name: "Munja",
+    name: "문자",
     slug: "Munja",
     scheme: "myapp",
     version: "1.0.0",

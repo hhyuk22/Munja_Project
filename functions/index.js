@@ -24,12 +24,20 @@ exports.sendPushNotificationOnMessage = onDocumentCreated(
           "chatrooms").doc(chatroomId).get();
       const chatroomData = chatroomSnap.data();
 
-      // [수정: max-len 오류 해결] 상대방 UID를 찾는 로직을 두 줄로 나눕니다.
       const receiverUid = chatroomData.users.find(
           (uid) => uid !== senderUid,
       );
       if (!receiverUid) {
         console.log("상대방 UID를 찾을 수 없습니다.");
+        return null;
+      }
+
+      const isSenderFinished = chatroomData.finished?.[senderUid] === true;
+
+      // 만약 상대방(발신자)의 finished 상태가 true가 아니라면
+      // 즉, 읽음 상태가 아니라면
+      if (!isSenderFinished) {
+        console.log(`알림전송거부: ${senderUid}가 읽음 처리 하지 않았습니다.`);
         return null;
       }
 
@@ -51,8 +59,8 @@ exports.sendPushNotificationOnMessage = onDocumentCreated(
       messages.push({
         to: pushToken,
         sound: "default",
-        title: `${receiverUserData.name}님에게 새 문자 도착!`,
-        body: newMessage.text,
+        title: `문자가 도착했습니다`, // 누구의 문자인지 안보이게
+        // body: newMessage.text, 문자 내용도 보이지 않게
         data: {chatroomId: chatroomId},
         priority: "high",
       });

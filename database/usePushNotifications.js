@@ -72,6 +72,18 @@ async function registerForPushNotificationsAsync() {
     
     console.log('🟢 [클라이언트 로그]: 획득된 토큰 값:', token); 
 
+    // ✅ [추가할 코드]: Android 알림 채널 중요도 설정
+    // ******************************************************
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', { // 채널 ID는 'default'로 설정
+            name: '기본 알림', // 사용자에게 표시되는 채널 이름
+            importance: Notifications.AndroidImportance.MAX, // ⭐ MAX로 설정해야 상단 팝업이 뜹니다!
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+        console.log("✅ Android 알림 채널 MAX 중요도로 등록 완료.");
+    }
+
     return token;
 }
 
