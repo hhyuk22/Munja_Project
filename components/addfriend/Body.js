@@ -71,6 +71,10 @@ const Body = ({ setAddFriendHandler }) => {
             lastMessageTime: new Date(),
             finished: finishedState,
             createdAt: new Date().toISOString(),
+            isAllowedToReceivePush: {
+                [myUid]: true,
+                [friendUid]: true,
+            }
           });
           console.log('채팅방 생성 및 초기 필드 생성 완료:', chatroomId);
         } else {

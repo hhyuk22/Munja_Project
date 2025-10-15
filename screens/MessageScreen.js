@@ -63,6 +63,7 @@ const MessageScreen = () => {
           lastMessageTime: new Date(),
           [`finished.${user.id}`]: false,
           [`finished.${friendUid}`]: false,
+          [`isAllowedToReceivePush.${user.id}`]: true, // 알림을 받을 수 있는 상태로
         });
       }
     } catch (error) {
@@ -77,6 +78,7 @@ const MessageScreen = () => {
 
       await updateDoc(chatroomRef, {
         [`finished.${myUid}`]: true,
+        [`isAllowedToReceivePush.${myUid}`]: true, // 알림을 받을 수 있는 상태로
       });
 
       console.log('읽음 처리 완료');
