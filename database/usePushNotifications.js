@@ -9,7 +9,7 @@ import { getAuth } from 'firebase/auth';
 // 푸시 알림 핸들러 설정 (앱이 실행 중일 때 알림이 오면 처리)
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowAlert: false,
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
