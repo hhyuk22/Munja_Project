@@ -100,8 +100,8 @@ exports.sendPushNotificationOnMessage = onDocumentCreated(
       messages.push({
         to: pushToken,
         sound: "default",
-        //title: `문자가 도착했습니다`, // 누구의 문자인지 안보이게, 문자 내용도 보이지 않게
-        body: `문자가 도착했습니다`, 
+        // title:`문자가 도착했습니다` 누구의 문자인지 안보이게 문자 내용도 보이지 않게
+        body: `문자가 도착했습니다`,
         data: {chatroomId: chatroomId},
         priority: "high",
       });
