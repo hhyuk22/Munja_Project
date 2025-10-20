@@ -1,6 +1,6 @@
 import { Modal, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 
-const HomeModal = ({ visible, onClose, onEditName, displayName }) => {
+const HomeModal = ({ visible, onClose, onEditName, displayName, onBlock }) => {
   return (
     <Modal
       transparent
@@ -14,6 +14,9 @@ const HomeModal = ({ visible, onClose, onEditName, displayName }) => {
           <Text style={styles.title}>{displayName}</Text>
           <TouchableOpacity style={styles.button} onPress={onEditName}>
             <Text style={styles.text}>친구 이름 바꾸기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={onBlock}>
+            <Text style={styles.text}>차단하기</Text>
           </TouchableOpacity>
         </Pressable>
       </Pressable>
